@@ -7,7 +7,7 @@ import sys
 import ast
 
 def check(q_id, code, func_name):
-    print(f"q_id: {q_id}, code: {code}, func_name: {func_name}")
+    # print(f"q_id: {q_id}, code: {code}, func_name: {func_name}")
     total_runtime = []
     file_ext = 'py'
     errcode = None
@@ -23,6 +23,7 @@ def check(q_id, code, func_name):
     assert p_data != None
 
     code_f = tempfile.NamedTemporaryFile(suffix=".py")
+    code_f.write(b"from typing import *\n")
     code_f.write(code.encode())
     code_f.seek(0)
 
@@ -36,15 +37,21 @@ def check(q_id, code, func_name):
             start_time = time.perf_counter()
 
             try:
-                result = ast.literal_eval("usercode." + func_name + "(" + p_data["testcase_" + str(i) + "_args"] + ")")
+                # print("usercode." + func_name + "(" + p_data["testcase_" + str(i) + "_args"] + ")")
+                result = eval("usercode." + func_name + "(" + p_data["testcase_" + str(i) + "_args"] + ")")
+
+                # a = p_data["testcase_" + str(i) + "_sol"]
+                # print(str(result).strip())
+                # print(p_data["testcase_" + str(i) + "_sol"])
+
+                if result != p_data["testcase_" + str(i) + "_sol"]:
+                    return {"result": False, "error": errcode, "runtime": sum(total_runtime), "n": i}
             except Exception as e:
                 errcode = e
+                return {"result": False, "error": errcode, "runtime": sum(total_runtime), "n": i}
 
             runtime = time.perf_counter() - start_time
 
-            if (result != ast.literal_eval(p_data["testcase_" + str(i) + "sol"])):
-                # print({"result": False, "error": errcode, "runtime": sum(total_runtime), "n": i})
-                return {"result": False, "error": errcode, "runtime": sum(total_runtime), "n": i}
     except Exception as e:
         errcode = e
         return {"result": True, "error": errcode, "runtime": sum(total_runtime), "n": 0}
@@ -54,7 +61,11 @@ def check(q_id, code, func_name):
 
 if __name__ == '__main__':
     function_code = """
-def my_temp_function(x, y):
-    return y *
+def twoSum(nums: List[int], target: int) -> List[int]:
+  for i, x in enumerate(nums):
+    for j in range(i + 1, len(nums)):
+        if x + nums[j] == target:
+            return [i, j]
+  return None
 """
-    print(check(1, function_code, "my_temp_function"))
+    print(check("1", function_code, "twoSum"))
