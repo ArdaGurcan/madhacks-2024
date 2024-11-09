@@ -49,6 +49,7 @@ def check(q_id, code, func_name):
 
             if result != p_data["testcase_" + str(i) + "_sol"]:
                 return {"result": False, "error": str(errcode), "runtime": sum(total_runtime), "n": i}
+            total_runtime.append(runtime)
     except Exception as e:
         errcode = e
         return {"result": True, "error": str(errcode), "runtime": sum(total_runtime), "n": 0}
