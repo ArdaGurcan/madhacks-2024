@@ -7,12 +7,13 @@ import sys
 import ast
 
 def check(q_id, code, func_name):
+    print(f"q_id: {q_id}, code: {code}, func_name: {func_name}")
     total_runtime = []
     file_ext = 'py'
     errcode = None
 
     with open("problems/id.txt", "r") as f:
-        assert q_id in list(map(lambda x: int(x.strip()), f.readlines()))
+        assert q_id in list(map(lambda x: x.strip(), f.readlines()))
 
     p_data = None
     problem_path = "problems/" + str(q_id) + ".json"
