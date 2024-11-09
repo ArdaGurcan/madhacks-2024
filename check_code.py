@@ -3,9 +3,14 @@ import importlib.util
 import subprocess
 import time
 import json
+import sys
+import ast
 
 def check(q_id, code, func_name):
+    total_runtime = []
     file_ext = 'py'
+    errcode = None
+
     with open("problems/id.txt", "r") as f:
         assert q_id in list(map(lambda x: int(x.strip()), f.readlines()))
 
@@ -20,19 +25,35 @@ def check(q_id, code, func_name):
     code_f.write(code.encode())
     code_f.seek(0)
 
-    spec = importlib.util.spec_from_file_location(func_name, temp_file_path)
-    temp_module = importlib.util.module_from_spec(spec)
-    sys.modules[func_name] = temp_module
-    spec.loader.exec_module(temp_module)
+    try:
+        spec = importlib.util.spec_from_file_location("usercode", code_f.name)
+        usercode = importlib.util.module_from_spec(spec)
+        sys.modules["usercode"] = usercode
+        spec.loader.exec_module(usercode)
 
-    result = eval("temp_module.my_temp_function(" + p_data["args"] + ")")
-    # for i in range(p_data["n"]): # Run tests
-        # start_time = time.perf_counter()
-    # result = eval(func_name + "(" + p_data ")")
-        # runtime = time.perf_counter() - start_time
-        # output = result.stdout.strip()
+        for i in range(p_data["n"]): # Run tests
+            start_time = time.perf_counter()
 
-    # return {"result": "pass", "time": 0.123}
+            try:
+                result = ast.literal_eval("usercode." + func_name + "(" + p_data["testcase_" + str(i) + "_args"] + ")")
+            except Exception as e:
+                errcode = e
+
+            runtime = time.perf_counter() - start_time
+
+            if (result != ast.literal_eval(p_data["testcase_" + str(i) + "sol"])):
+                # print({"result": False, "error": errcode, "runtime": sum(total_runtime), "n": i})
+                return {"result": False, "error": errcode, "runtime": sum(total_runtime), "n": i}
+    except Exception as e:
+        errcode = e
+        return {"result": True, "error": errcode, "runtime": sum(total_runtime), "n": 0}
+
+    # print({"result": True, "error": errcode, "runtime": sum(total_runtime), "n": p_data["n"]})
+    return {"result": True, "error": errcode, "runtime": sum(total_runtime), "n": p_data["n"]}
 
 if __name__ == '__main__':
-    check(0, "print(\"Hello World\")")
+    function_code = """
+def my_temp_function(x, y):
+    return y *
+"""
+    print(check(1, function_code, "my_temp_function"))
