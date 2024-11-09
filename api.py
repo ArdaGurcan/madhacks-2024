@@ -57,3 +57,9 @@ def problem():
     with open("problems/" + str(q_id) + ".json", "r") as file:
         return json.dumps(json.load(file)), 200
 
+@app.route('/leaderboard', methods=['GET', 'POST'])
+@cross_origin()
+def leaderboard():
+    lb = [[username, time] for username, time in users.items()]
+    lb.sort(key=lambda x: x[1])
+    return json.dumps(lb), 200
