@@ -42,7 +42,7 @@ def check():
 
     data = check_code.check(q_id, code, function_name)
 
-    if not username:
+    if username:
         username = decode(encoded_username)
         if data["result"]: # If all tests have passed
             update_user_runtime(username, data["runtime"])
