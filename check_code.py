@@ -1,2 +1,2 @@
 def check(q_id, code):
-    return {"result": "pass", "time": 0.123}
+    return {"result": "pass", "time": 0.12}
