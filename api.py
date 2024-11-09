@@ -2,6 +2,7 @@ from flask import Flask
 from flask import request
 from flask_cors import CORS, cross_origin
 
+import urllib.parse
 import json
 import base64
 
@@ -16,9 +17,9 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def check():
     return "working"
 
-def decode(encoded_code):
+def decode(encoded_data):
     # Convert the encoded code from a string to bytes, decode it, and return as a string
-    return base64.urlsafe_b64decode(encoded_code.encode()).decode()
+    return urllib.parse.unquote(encoded_data)
 
 @app.route('/check', methods=['GET', 'POST'])
 @cross_origin()
