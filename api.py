@@ -7,22 +7,18 @@ import json
 import base64
 
 import check_code
+import session
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
-users = dict()
+
+live_session = False
 
 @app.route("/")
 @cross_origin()
 def main():
     return "working"
-
-def update_user_runtime(username, runtime):
-    if username in users:
-        users[username] = runtime if runtime < users[username] else users[username]
-    else:
-        users[username] = runtime
 
 def decode(encoded_data):
     # Convert the encoded code from a string to bytes, decode it, and return as a string
@@ -45,7 +41,7 @@ def check():
     if encoded_username:
         username = decode(encoded_username)
         if data["result"]: # If all tests have passed
-            update_user_runtime(username, data["runtime"])
+            session.update_user_runtime(username, data["runtime"])
 
     # Call the function to check the decoded code
     return json.dumps(data), 200
@@ -60,6 +56,19 @@ def problem():
 @app.route('/leaderboard', methods=['GET', 'POST'])
 @cross_origin()
 def leaderboard():
-    lb = [[username, time] for username, time in users.items()]
+    lb = [[username, time] for username, time in session.users.items()]
     lb.sort(key=lambda x: x[1])
     return json.dumps(lb), 200
+
+@app.route('/session', methods=['GET', 'POST'])
+@cross_origin()
+def session():
+    if not live_session:
+        session.session_init()
+
+    return json.dumps({"timer": session.time_value})
+
+@app.route('/session', methods=['GET', 'POST'])
+@cross_origin()
+def alive():
+    return json.dumps(session.users)
