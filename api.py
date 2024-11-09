@@ -39,12 +39,13 @@ def check():
     # Decode the received code
     code = decode(encoded_code)
     function_name = decode(encoded_function_name)
-    username = decode(encoded_username)
 
     data = check_code.check(q_id, code, function_name)
 
-    if data["result"]: # If all tests have passed
-        update_user_runtime(username, data["runtime"])
+    if not username:
+        username = decode(encoded_username)
+        if data["result"]: # If all tests have passed
+            update_user_runtime(username, data["runtime"])
 
     # Call the function to check the decoded code
     return json.dumps(data), 200
