@@ -40,10 +40,10 @@ def check(q_id, code, func_name):
                 result = eval("usercode." + func_name + "(" + p_data["testcase_" + str(i) + "_args"] + ")")
 
                 if result != p_data["testcase_" + str(i) + "_sol"]:
-                    return {"result": False, "error": errcode, "runtime": sum(total_runtime), "n": i}
+                    return {"result": False, "error": str(errcode), "runtime": sum(total_runtime), "n": i}
             except Exception as e:
                 errcode = e
-                return {"result": False, "error": errcode, "runtime": sum(total_runtime), "n": i}
+                return {"result": False, "error": str(errcode), "runtime": sum(total_runtime), "n": i}
 
             runtime = time.perf_counter() - start_time
 
