@@ -68,7 +68,7 @@ def session():
 
     return json.dumps({"timer": session.time_value})
 
-@app.route('/session', methods=['GET', 'POST'])
+@app.route('/check_alive', methods=['GET', 'POST'])
 @cross_origin()
 def alive():
     return json.dumps(session.users)
