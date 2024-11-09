@@ -64,6 +64,7 @@ def leaderboard():
 @cross_origin()
 def session():
     if not live_session:
+        live_session = True
         session.session_init()
 
     return json.dumps({"timer": session.time_value})
@@ -71,4 +72,6 @@ def session():
 @app.route('/check_alive', methods=['GET', 'POST'])
 @cross_origin()
 def alive():
+    session.wait_timer()
+    session.start_timer()
     return json.dumps(session.users)
