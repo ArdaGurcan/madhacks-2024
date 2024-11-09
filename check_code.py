@@ -36,25 +36,17 @@ def check(q_id, code, func_name):
         for i in range(p_data["n"]): # Run tests
             start_time = time.perf_counter()
 
-            try:
-                result = eval("usercode." + func_name + "(" + p_data["testcase_" + str(i) + "_args"] + ")")
-
-                if result != p_data["testcase_" + str(i) + "_sol"]:
-                    return {"result": False, "error": str(errcode), "runtime": sum(total_runtime), "n": i}
-            except Exception as e:
-                errcode = e
-                return {"result": False, "error": str(errcode), "runtime": sum(total_runtime), "n": i}
-
-            runtime = time.perf_counter() - start_time
+            result = eval("usercode." + func_name + "(" + p_data["testcase_" + str(i) + "_args"] + ")")
 
             if result != p_data["testcase_" + str(i) + "_sol"]:
-                return {"result": False, "error": str(errcode), "runtime": sum(total_runtime), "n": i}
+                raise AssertionError(f"For testcase {i}, expected {p_data['testcase_' + str(i) + '_sol']}, got {result}")
+
+            runtime = time.perf_counter() - start_time
             total_runtime.append(runtime)
     except Exception as e:
         errcode = e
-        return {"result": False, "error": str(errcode), "runtime": sum(total_runtime), "n": 0}
+        return {"result": False, "error": str(errcode), "runtime": sum(total_runtime), "n": len(total_runtime)}
 
-    # print({"result": True, "error": errcode, "runtime": sum(total_runtime), "n": p_data["n"]})
     return {"result": True, "error": str(errcode), "runtime": sum(total_runtime), "n": p_data["n"]}
 
 if __name__ == '__main__':
