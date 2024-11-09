@@ -9,3 +9,6 @@ pip install -r requirements.txt
 ```bash
 flask --app api run
 ```
+
+# check code
+http://ardagurcan.com:5000/check?code
