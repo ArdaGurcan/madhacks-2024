@@ -44,13 +44,13 @@ def check(q_id, code, func_name):
 
             if (result != ast.literal_eval(p_data["testcase_" + str(i) + "sol"])):
                 # print({"result": False, "error": errcode, "runtime": sum(total_runtime), "n": i})
-                return {"result": False, "error": errcode, "runtime": sum(total_runtime), "n": i}
+                return {"result": False, "error": str(errcode), "runtime": sum(total_runtime), "n": i}
     except Exception as e:
         errcode = e
-        return {"result": True, "error": errcode, "runtime": sum(total_runtime), "n": 0}
+        return {"result": True, "error": str(errcode), "runtime": sum(total_runtime), "n": 0}
 
     # print({"result": True, "error": errcode, "runtime": sum(total_runtime), "n": p_data["n"]})
-    return {"result": True, "error": errcode, "runtime": sum(total_runtime), "n": p_data["n"]}
+    return {"result": True, "error": str(errcode), "runtime": sum(total_runtime), "n": p_data["n"]}
 
 if __name__ == '__main__':
     function_code = """

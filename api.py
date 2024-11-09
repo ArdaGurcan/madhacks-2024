@@ -34,6 +34,7 @@ def login():
     
     # Call the function to check the decoded code
     # return json.dumps({"status":"pass", "time":31}), 200
+    print(f"resu;lt: {check_code.check(q_id, code, function_name)}")
     return json.dumps(check_code.check(q_id, code, function_name)), 200
 
 @app.route('/problem', methods=['GET', 'POST'])
