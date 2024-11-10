@@ -28,6 +28,8 @@ def timer():
         time.sleep(30)
         timer_status = Status.RUNNING
         time_value = INTERVAL
+        time.sleep(10)
+        timer_status = Status.RUNNING
 
     if timer_status == Status.ZOMBIE:
         users = dict()
