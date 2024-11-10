@@ -19,17 +19,18 @@ def timer():
     global time_value
     global users
 
-    time.sleep(1)
-    time_value -= 1
-    if time_value <= 0:
-        timer_status == Status.WAITING
+    while True:
+        time.sleep(1)
+        time_value -= 1
+        if time_value <= 0:
+            timer_status == Status.WAITING
 
-    if timer_status == Status.WAITING:
-        app.logger.info("Waiting has been set")
-        users.clear()
-        timer_status = Status.RUNNING
-        time_value = INTERVAL
-        time.sleep(10)
+        if timer_status == Status.WAITING:
+            app.logger.info("Waiting has been set")
+            users.clear()
+            timer_status = Status.RUNNING
+            time_value = INTERVAL
+            time.sleep(10)
 
 def start_timer():
     global timer_status
