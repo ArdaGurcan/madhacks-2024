@@ -24,14 +24,14 @@ def timer():
         timer_status == Status.ZOMBIE
 
     if timer_status == Status.WAITING:
-        users = users.clear()
+        users.clear()
         timer_status = Status.RUNNING
         time_value = INTERVAL
         time.sleep(10)
         timer_status = Status.RUNNING
 
     if timer_status == Status.ZOMBIE:
-        users = users.clear()
+        users.clear()
         return
 
 def start_timer():
