@@ -13,6 +13,8 @@ time_value = -1
 users = dict()
 
 timer_status = Status.ZOMBIE
+timer_value_lock = threading.Lock()
+timer_status_lock = threading.Lock()
 
 def timer():
     global timer_status
@@ -21,7 +23,9 @@ def timer():
 
     while True:
         time.sleep(1)
-        time_value -= 1
+        with timer_value_lock:
+            time_value -= 1
+
         if time_value <= 0:
             timer_status == Status.WAITING
 
@@ -29,8 +33,11 @@ def timer():
             if not users:
                 return
             users.clear()
-            timer_status = Status.RUNNING
-            time_value = INTERVAL
+
+            with timer_value_lock:
+                time_value = INTERVAL
+                with timer_status_lock:
+                    timer_status = Status.RUNNING
             time.sleep(10)
 
 def start_timer():
@@ -45,7 +52,9 @@ def wait_timer(a):
     global timer_status
     global app
     app = a
-    timer_status = Status.WAITING
+    with timer_value_lock:
+        with timer_status_lock:
+            timer_status = Status.WAITING
 
 def session_init():
     global users
