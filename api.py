@@ -64,7 +64,7 @@ def leaderboard():
 @cross_origin()
 def session_start():
     global live_session
-    
+
     if not live_session:
         live_session = True
         session.session_init()
@@ -76,4 +76,4 @@ def session_start():
 def alive():
     session.wait_timer()
     session.start_timer()
-    return json.dumps(session.users)
+    return json.dumps({"users": session.users.keys()})
