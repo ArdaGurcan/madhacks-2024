@@ -39,8 +39,10 @@ def start_timer():
     clock_thread = threading.Thread(target=timer, daemon=True)
     clock_thread.start()
 
-def wait_timer():
+def wait_timer(a):
     global timer_status
+    global app
+    app = a
     timer_status = Status.WAITING
 
 def session_init():
