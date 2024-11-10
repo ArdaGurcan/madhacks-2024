@@ -7,7 +7,7 @@ class Status(Enum):
     WAITING = auto()
     ZOMBIE = auto()
 
-INTERVAL = 60 * 10
+INTERVAL = 60 * 0.2
 time_value = -1
 users = dict()
 
