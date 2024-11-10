@@ -14,6 +14,10 @@ users = dict()
 timer_status = Status.ZOMBIE
 
 def timer():
+    global timer_status
+    global time_value
+    global users
+
     time.sleep(1)
     time_value -= 1
     if time_value <= 0:
@@ -28,19 +32,27 @@ def timer():
         return
 
 def start_timer():
+    global timer_status
+    global time_value
+
     if timer_status == Status.ZOMBIE:
         time_value = INTERVAL
         clock_thread = threading.Thread(target=timer, daemon=True)
         clock_thread.start()
 
 def wait_timer():
+    global timer_status
+
     timer_status = Status.WAITING
 
 def session_init():
+    global users
+
     users = dict()
     start_timer()
 
 def update_user_runtime(username, runtime):
+    global users
     if username in users:
         users[username] = runtime if runtime < users[username] else users[username]
     else:
