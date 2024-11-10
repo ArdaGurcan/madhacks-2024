@@ -1,0 +1,19 @@
+{
+  "problem": "# Ugly Number\nAn **ugly number** is a positive integer whose prime factors are limited to `2`, `3`, and `5`.\n\nGiven an integer `n`, return `true` _if_ `n` _is an **ugly number**_.\n\n**Example 1:**\n\n> **Input:** n = 6\n> **Output:** true\n> **Explanation:** 6 = 2 × 3\n\n**Example 2:**\n\n> **Input:** n = 1\n> **Output:** true\n> **Explanation:** 1 has no prime factors, therefore all of its prime factors are limited to 2, 3, and 5.\n\n**Example 3:**\n\n> **Input:** n = 14\n> **Output:** false\n> **Explanation:** 14 is not ugly since it includes the prime factor 7.\n\n**Constraints:**\n\n- `-231 <= n <= 231 - 1`",
+  "code": "def isUgly(n: int) -> bool:",
+  "n": 5,
+  "testcase_0_args": "6",
+  "testcase_0_sol": true,
+
+  "testcase_1_args": "1",
+  "testcase_1_sol": true,
+
+  "testcase_2_args": "14",
+  "testcase_2_sol": false,
+
+  "testcase_3_args": "863619187",
+  "testcase_3_sol": false,
+
+  "testcase_4_args": "67500",
+  "testcase_4_sol": true
+}
