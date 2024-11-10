@@ -25,22 +25,29 @@ def timer():
 
     while True:
         time.sleep(1)
-        with timer_value_lock:
-            with timer_status_lock:
-                time_value -= 1
+        timer_value_lock.acquire()
+        timer_status_lock.acquire()
+        time_value -= 1
 
-                if timer_status == Status.WAITING:
-                    if not users:
-                        api.live_session = False
-                        return
+        if timer_status == Status.WAITING:
+            if not users:
+                api.live_session = False
+                timer_value_lock.release()
+                timer_status_lock.release()
+                return
 
-                    users.clear()
-                    app.logger.info("Users have been cleared")
+            users.clear()
+            app.logger.info("Users have been cleared")
 
-                    time_value = INTERVAL
-                    timer_status = Status.RUNNING
-        time.sleep(10)
+            time_value = INTERVAL
+            timer_status = Status.RUNNING
+            timer_value_lock.release()
+            timer_status_lock.release()
+            time.sleep(10)
 
+        else:
+            timer_value_lock.release()
+            timer_status_lock.release()
 def start_timer():
     global timer_status
     global time_value
