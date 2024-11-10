@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from flask_cors import CORS, cross_origin
+import logging
 
 import urllib.parse
 import json
@@ -69,8 +70,8 @@ def session_start():
         live_session = True
         session.session_init()
 
-    print("session")
-    print(json.dumps({"timer": session.time_value}))
+    app.logger.info("session")
+    app.logger.info(json.dumps({"timer": session.time_value}))
     return json.dumps({"timer": session.time_value})
 
 @app.route('/check_alive', methods=['GET', 'POST'])
@@ -78,6 +79,6 @@ def session_start():
 def alive():
     ret = json.dumps({"timer": session.time_value, "users": list(session.users.keys())})
     session.wait_timer()
-    print("/check_alive")
-    print(ret)
+    app.logger.info("/check_alive")
+    app.logger.info(ret)
     return ret
