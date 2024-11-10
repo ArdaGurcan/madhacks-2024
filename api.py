@@ -91,13 +91,25 @@ def alive():
 @socketio.on('connect')
 def handle_connect():
     app.logger.info('Client connected')
-    emit('message', {'message': 'Welcome to the WebSocket server!'})
-    time.sleep(random.randrange(1,int(session.INTERVAL) - 5))  # Wait for 1 to 5 seconds
+    #emit('message', {'message': 'Welcome to the WebSocket server!'})
+    #time.sleep(random.randrange(1,int(session.INTERVAL) - 5))  # Wait for 1 to 5 seconds
     message = {
         'message': 'Hello from server!',
         'value': random.choice(["squid", "lightning", "bomb"])
     }
-    emit('message', message)
+    #emit('message', message)
+
+# Handle message from frontend
+@socketio.on('frontend_message')
+def handle_frontend_message(data):
+    app.logger.info('Received message from frontend: %s', data)
+    # Emit the received message back to the frontend
+    message = {
+        'username': data['username'],
+        'action': data['action'],
+
+    }
+    socketio.emit('message',  message)
 
 if __name__ == '__main__':
     # Start the background thread for sending messages
