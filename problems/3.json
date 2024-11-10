@@ -1,7 +1,7 @@
 {
   "problem": "# Remove Invalid Parentheses
 Given a string `s` that contains parentheses and letters, remove the minimum number of invalid parentheses to make the input string valid.\n\nReturn _a list of **unique strings** that are valid with the minimum number of removals_. You may return the answer in **any order**.\n\n**Example 1:**\n\n> **Input:** s = \"()())()\"\n> **Output:** [\"(())()\",\"()()()\"]\n\n**Example 2:**\n\n> **Input:** s = \"(a)())()\"\n> **Output:** [\"(a())()\",\"(a)()()\"]\n\n**Example 3:**\n\n> **Input:** s = \")(\"\n> **Output:** [\"\"]\n\n**Constraints:**\n\n- `1 <= s.length <= 25`\n- `s` consists of lowercase English letters and parentheses `'('` and `')'`.\n- There will be at most `20` parentheses in `s`.",
-  "code": "def removeInvalidParentheses(s) -> str:",
+  "code": "def removeInvalidParentheses(s: str) -> List[str]:",
   "n": 5,
   "testcase_0_args": "())",
   "testcase_0_sol": ["()"],
