@@ -71,7 +71,7 @@ def session_start():
     global live_session
 
     if not live_session:
-        app.logger.info("first session")
+        app.logger.info("Restarting Session")
         live_session = True
         session.session_init()
 
@@ -84,7 +84,8 @@ def alive():
     ret = json.dumps({"timer": session.time_value, "users": list(session.users.keys())})
     session.wait_timer(app)
     app.logger.info("/check_alive")
-    app.logger.info(ret)
+    app.logger.info(f"users: {session.alive_users}")
+    session.users_sent = True
     return ret
 
 # WebSocket Events
@@ -99,6 +100,10 @@ def handle_connect():
     }
     #emit('message', message)
 
+@socketio.on('disconnect')
+def handle_disconnect():
+    app.logger.info('Client removed')
+
 # Handle message from frontend
 @socketio.on('frontend_message')
 def handle_frontend_message(data):
@@ -110,6 +115,16 @@ def handle_frontend_message(data):
 
     }
     socketio.emit('message',  message)
+
+@socketio.on('new_user')
+def handle_new_user(data):
+    app.logger.info(f"User successfully added: {data['username']}")
+    session.alive_users.add(data['username'])
+
+@socketio.on('kill_user')
+def handle_new_user(data):
+    app.logger.info(f"User successfully removed: {data['username']}")
+    session.alive_users.remove(data['username'])
 
 if __name__ == '__main__':
     # Start the background thread for sending messages

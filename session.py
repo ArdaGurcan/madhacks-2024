@@ -5,16 +5,13 @@ import api
 import logging
 
 app = None
-class Status(Enum):
-    RUNNING = auto()
-    WAITING = auto()
-    ZOMBIE = auto()
 
 INTERVAL = 60 * 0.5
 time_value = -1
 users = dict()
+alive_users = set()
 
-timer_status = Status.ZOMBIE
+timer_status = 0
 timer_value_lock = threading.Lock()
 timer_status_lock = threading.Lock()
 
@@ -29,18 +26,18 @@ def timer():
         timer_status_lock.acquire()
         time_value -= 1
 
-        if timer_status == Status.WAITING:
-            # if not users:
-            #     api.live_session = False
-            #     timer_value_lock.release()
-            #     timer_status_lock.release()
-            #     return
+        if not alive_users:
+            api.live_session = False
+            timer_value_lock.release()
+            timer_status_lock.release()
+            return
 
+        if timer_status >= len(alive_users):
             users.clear()
             app.logger.info("Users have been cleared")
 
             time_value = INTERVAL
-            timer_status = Status.RUNNING
+            timer_status = 0
             timer_value_lock.release()
             timer_status_lock.release()
             time.sleep(10)
@@ -48,6 +45,7 @@ def timer():
         else:
             timer_value_lock.release()
             timer_status_lock.release()
+
 def start_timer():
     global timer_status
     global time_value
@@ -62,11 +60,13 @@ def wait_timer(a):
     app = a
     with timer_value_lock:
         with timer_status_lock:
-            timer_status = Status.WAITING
+            timer_status += 1
 
 def session_init():
     global users
+    global alive_users
 
+    alive_users.clear()
     users.clear()
     start_timer()
 
