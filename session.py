@@ -1,6 +1,7 @@
 import threading
 import time
 from enum import Enum, auto
+import api
 
 app = None
 class Status(Enum):
@@ -31,6 +32,7 @@ def timer():
 
         if timer_status == Status.WAITING:
             if not users:
+                api.live_session = False
                 return
             users.clear()
 
