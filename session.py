@@ -10,6 +10,7 @@ INTERVAL = 60 * 0.5
 time_value = -1
 users = dict()
 alive_users = set()
+live_session = False
 
 timer_status = 0
 timer_value_lock = threading.Lock()
@@ -19,6 +20,7 @@ def timer():
     global timer_status
     global time_value
     global users
+    global live_session
 
     while True:
         time.sleep(1)
@@ -26,8 +28,11 @@ def timer():
         timer_status_lock.acquire()
         time_value -= 1
 
+        app.logger.info(alive_users)
+
         if not alive_users:
-            api.live_session = False
+            app.logger.info("Nobody is playing")
+            live_session = False
             timer_value_lock.release()
             timer_status_lock.release()
             return
@@ -54,21 +59,22 @@ def start_timer():
     clock_thread = threading.Thread(target=timer, daemon=True)
     clock_thread.start()
 
-def wait_timer(a):
+def wait_timer():
     global timer_status
     global app
-    app = a
     with timer_value_lock:
         with timer_status_lock:
             timer_status += 1
 
-def session_init():
-    global users
-    global alive_users
-
-    alive_users.clear()
-    users.clear()
-    start_timer()
+def session_init(a):
+    global live_session
+    global app
+    app = a
+    # alive_users.clear()
+    # users.clear()
+    if not live_session:
+        live_session = True
+        start_timer()
 
 def update_user_runtime(username, runtime):
     global users

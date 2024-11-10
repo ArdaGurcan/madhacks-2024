@@ -21,6 +21,7 @@ CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
 
 live_session = False
+live_session_lock = threading.Lock()
 
 @app.route("/")
 @cross_origin()
@@ -73,31 +74,27 @@ def get_ai_answer():
     app.logger.info("AI question")
     asn = request.args.get('question')
     decoded = decode(asn)
-    
+
     try:
         genai.configure(api_key=('AIzaSyBDY6NKnOugfvx_ZJvyoyMlQra0RUkwAtQ'))
-       
+
         model = genai.GenerativeModel('gemini-1.5-flash')
 
         response = model.generate_content([f"Here is a question. Answer it concisely. {decoded}"], stream=True)
         response.resolve()
-        
+
         app.logger.info(response.text)
         return {"result": (response.text) }, 200
 
     except Exception as e:
         return {"error": str(e)}, 500
-   
+
 
 @app.route('/session', methods=['GET', 'POST'])
 @cross_origin()
 def session_start():
-    global live_session
-
-    if not live_session:
-        app.logger.info("Restarting Session")
-        live_session = True
-        session.session_init()
+    app.logger.info("Restarting Session")
+    session.session_init(app)
 
     app.logger.info("session")
     return json.dumps({"timer": session.time_value})
@@ -106,9 +103,9 @@ def session_start():
 @cross_origin()
 def alive():
     ret = json.dumps({"timer": session.time_value, "users": list(session.users.keys())})
-    session.wait_timer(app)
-    app.logger.info("/check_alive")
-    app.logger.info(f"users: {session.alive_users}")
+    session.wait_timer()
+    # app.logger.info("/check_alive")
+    # app.logger.info(f"users: {session.alive_users}")
     session.users_sent = True
     return ret
 
