@@ -62,7 +62,9 @@ def leaderboard():
 
 @app.route('/session', methods=['GET', 'POST'])
 @cross_origin()
-def session():
+def session_start():
+    global live_session
+    
     if not live_session:
         live_session = True
         session.session_init()
