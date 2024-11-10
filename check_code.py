@@ -6,7 +6,7 @@ import json
 import sys
 import ast
 
-def check(q_id, code, func_name):
+def check(q_id, code, func_name, app):
     # print(f"q_id: {q_id}, code: {code}, func_name: {func_name}")
     total_runtime = []
     file_ext = 'py'
@@ -35,7 +35,7 @@ def check(q_id, code, func_name):
 
         for i in range(p_data["n"]): # Run tests
             start_time = time.perf_counter()
-
+            app.logger.info("usercode." + func_name + "(" + p_data["testcase_" + str(i) + "_args"] + ")")
             result = eval("usercode." + func_name + "(" + p_data["testcase_" + str(i) + "_args"] + ")")
 
             if result != p_data["testcase_" + str(i) + "_sol"]:
@@ -58,4 +58,10 @@ def twoSum(nums: List[int], target: int) -> List[int]:
             return [i, j]
   return None
 """
+    """
+import re
+def isPalindrome(s: str) -> bool:
+    s = re.sub(r'\W+', '', s).lower()
+    return s[::-1] == s
+    """
     print(check("1", function_code, "twoSum"))

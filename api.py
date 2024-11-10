@@ -44,7 +44,7 @@ def check():
     code = decode(encoded_code)
     function_name = decode(encoded_function_name)
 
-    data = check_code.check(q_id, code, function_name)
+    data = check_code.check(q_id, code, function_name, app)
 
     if encoded_username:
         username = decode(encoded_username)

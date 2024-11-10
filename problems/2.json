@@ -2,18 +2,18 @@
   "problem":  "# Valid palindrome\n\nA phrase is a **palindrome** if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.\n\nGiven a string `s`, return `true` _if it is a **palindrome**, or_ `false` _otherwise_.\n\n**Example 1:**\n> **Input:** s = \"A man, a plan, a canal: Panama\"\n> **Output:** true\n> **Explanation:** \"amanaplanacanalpanama\" is a palindrome.\n\n**Example 2:**\n> **Input:** s = \"race a car\"\n> **Output:** false\n> **Explanation:** \"raceacar\" is not a palindrome.\n\n**Example 3:**\n> **Input:** s = \" \"\n> **Output:** true\n> **Explanation:** s is an empty string \"\" after removing non-alphanumeric characters.\n> **Constraints:**\n\n- `1 <= s.length <= 2 * 10^5`\n- `s` consists only of printable ASCII characters.",
   "code": "def isPalindrome(s: str) -> bool:",
   "n": 5,
-  "testcase_0_args": "0P0",
+  "testcase_0_args": "\"0P0\"",
   "testcase_0_sol": true,
 
-  "testcase_1_args": "Wa,s it$ a ^car or\" a cat I saw?",
+  "testcase_1_args": "\"Wa,s it$ a ^car or a cat I saw?\"",
   "testcase_1_sol": true,
 
-  "testcase_2_args": "Palindrome 12321, but not quite.",
+  "testcase_2_args": "\"Palindrome 12321, but not quite.\"",
   "testcase_2_sol": false,
 
-  "testcase_3_args": "z",
+  "testcase_3_args": "\"z\"",
   "testcase_3_sol": true,
 
-  "testcase_4_args": "      ",
+  "testcase_4_args": "\"      \"",
   "testcase_4_sol": true
 }
