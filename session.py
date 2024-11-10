@@ -26,24 +26,20 @@ def timer():
     while True:
         time.sleep(1)
         with timer_value_lock:
-            time_value -= 1
+            with timer_status_lock:
+                time_value -= 1
 
-        # if time_value <= 0:
-        #     timer_status = Status.WAITING
+                if timer_status == Status.WAITING:
+                    if not users:
+                        api.live_session = False
+                        return
 
-        if timer_status == Status.WAITING:
-            if not users:
-                api.live_session = False
-                return
+                    users.clear()
+                    app.logger.info("Users have been cleared")
 
-            users.clear()
-            app.logger.info("Users have been cleared")
-
-            with timer_value_lock:
-                with timer_status_lock:
                     time_value = INTERVAL
                     timer_status = Status.RUNNING
-            time.sleep(10)
+        time.sleep(10)
 
 def start_timer():
     global timer_status
