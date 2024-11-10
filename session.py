@@ -44,7 +44,7 @@ def wait_timer():
 def session_init():
     global users
 
-    users = dict()
+    users.clear()
     start_timer()
 
 def update_user_runtime(username, runtime):
