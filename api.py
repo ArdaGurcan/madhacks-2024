@@ -1,18 +1,22 @@
-from flask import Flask
-from flask import request
+from flask import Flask, request
 from flask_cors import CORS, cross_origin
+from flask_socketio import SocketIO, emit
 import logging
-
 import urllib.parse
 import json
 import base64
 
 import check_code
 import session
+import threading
+import random
+import time
 
 app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app)
+
+# Initialize SocketIO with async_mode set to 'eventlet'
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
 
 live_session = False
 
@@ -82,3 +86,21 @@ def alive():
     app.logger.info("/check_alive")
     app.logger.info(ret)
     return ret
+
+# WebSocket Events
+@socketio.on('connect')
+def handle_connect():
+    app.logger.info('Client connected')
+    emit('message', {'message': 'Welcome to the WebSocket server!'})
+    time.sleep(random.randrange(1,int(session.INTERVAL) - 5))  # Wait for 1 to 5 seconds
+    message = {
+        'message': 'Hello from server!',
+        'value': random.choice(["squid", "lightning", "bomb"])
+    }
+    emit('message', message)
+
+if __name__ == '__main__':
+    # Start the background thread for sending messages
+    # socketio.start_background_task(target=background_thread)
+    # Run the Flask app with SocketIO using eventlet
+    socketio.run(app, host='0.0.0.0', port=6789, debug=True)
