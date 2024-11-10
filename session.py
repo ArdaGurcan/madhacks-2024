@@ -24,6 +24,9 @@ def timer():
         timer_status == Status.WAITING
 
     if timer_status == Status.WAITING:
+        print("waiting section")
+        print("waiting section")
+        print("waiting section")
         users.clear()
         timer_status = Status.RUNNING
         time_value = INTERVAL
