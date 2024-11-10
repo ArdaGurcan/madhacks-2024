@@ -12,6 +12,8 @@ import threading
 import random
 import time
 
+import google.generativeai as genai
+
 app = Flask(__name__)
 CORS(app)
 
@@ -64,6 +66,28 @@ def leaderboard():
     lb = [[username, time] for username, time in session.users.items()]
     lb.sort(key=lambda x: x[1])
     return json.dumps(lb), 200
+
+@app.route('/ai', methods=['GET', 'POST'])
+@cross_origin()
+def get_ai_answer():
+    app.logger.info("AI question")
+    asn = request.args.get('question')
+    decoded = decode(asn)
+    
+    try:
+        genai.configure(api_key=('AIzaSyBDY6NKnOugfvx_ZJvyoyMlQra0RUkwAtQ'))
+       
+        model = genai.GenerativeModel('gemini-1.5-flash')
+
+        response = model.generate_content([f"Here is a question. Answer it concisely. {decoded}"], stream=True)
+        response.resolve()
+        
+        app.logger.info(response.text)
+        return {"result": (response.text) }, 200
+
+    except Exception as e:
+        return {"error": str(e)}, 500
+   
 
 @app.route('/session', methods=['GET', 'POST'])
 @cross_origin()
