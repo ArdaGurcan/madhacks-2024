@@ -24,9 +24,9 @@ def timer():
         timer_status == Status.ZOMBIE
 
     if timer_status == Status.WAITING:
-        time.sleep(30)
-        timer_status = Status.RUNNING
         time_value = INTERVAL
+        time.sleep(10)
+        timer_status = Status.RUNNING
 
     if timer_status == Status.ZOMBIE:
         return
