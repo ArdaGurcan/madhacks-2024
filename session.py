@@ -21,31 +21,24 @@ def timer():
     time.sleep(1)
     time_value -= 1
     if time_value <= 0:
-        timer_status == Status.ZOMBIE
+        timer_status == Status.WAITING
 
     if timer_status == Status.WAITING:
         users.clear()
         timer_status = Status.RUNNING
         time_value = INTERVAL
         time.sleep(10)
-        timer_status = Status.RUNNING
-
-    if timer_status == Status.ZOMBIE:
-        users.clear()
-        return
 
 def start_timer():
     global timer_status
     global time_value
 
-    if timer_status == Status.ZOMBIE:
-        time_value = INTERVAL
-        clock_thread = threading.Thread(target=timer, daemon=True)
-        clock_thread.start()
+    time_value = INTERVAL
+    clock_thread = threading.Thread(target=timer, daemon=True)
+    clock_thread.start()
 
 def wait_timer():
     global timer_status
-
     timer_status = Status.WAITING
 
 def session_init():

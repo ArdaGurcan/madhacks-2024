@@ -76,5 +76,4 @@ def session_start():
 def alive():
     ret = json.dumps({"timer": session.time_value, "users": list(session.users.keys())})
     session.wait_timer()
-    session.start_timer()
     return ret
