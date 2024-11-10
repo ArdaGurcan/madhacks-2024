@@ -24,11 +24,13 @@ def timer():
         timer_status == Status.ZOMBIE
 
     if timer_status == Status.WAITING:
+        users = dict()
         time.sleep(30)
         timer_status = Status.RUNNING
         time_value = INTERVAL
 
     if timer_status == Status.ZOMBIE:
+        users = dict()
         return
 
 def start_timer():
