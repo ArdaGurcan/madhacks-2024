@@ -77,8 +77,8 @@ def session_start():
 @app.route('/check_alive', methods=['GET', 'POST'])
 @cross_origin()
 def alive():
-    session.wait_timer(app)
     ret = json.dumps({"timer": session.time_value, "users": list(session.users.keys())})
+    session.wait_timer(app)
     app.logger.info("/check_alive")
     app.logger.info(ret)
     return ret

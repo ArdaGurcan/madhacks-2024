@@ -26,7 +26,8 @@ def timer():
             timer_status == Status.WAITING
 
         if timer_status == Status.WAITING:
-            app.logger.info("Waiting has been set")
+            if not users:
+                return
             users.clear()
             timer_status = Status.RUNNING
             time_value = INTERVAL
