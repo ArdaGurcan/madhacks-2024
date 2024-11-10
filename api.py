@@ -99,6 +99,11 @@ def session_start():
     app.logger.info("session")
     return json.dumps({"timer": session.time_value})
 
+@app.route('/timer', methods=['GET', 'POST'])
+@cross_origin()
+def timer_lookup():
+    return json.dumps({"timer": session.time_value})
+
 @app.route('/check_alive', methods=['GET', 'POST'])
 @cross_origin()
 def alive():
