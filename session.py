@@ -2,6 +2,7 @@ import threading
 import time
 from enum import Enum, auto
 import api
+import logger
 
 app = None
 class Status(Enum):
@@ -27,8 +28,8 @@ def timer():
         with timer_value_lock:
             time_value -= 1
 
-        if time_value <= 0:
-            timer_status = Status.WAITING
+        # if time_value <= 0:
+        #     timer_status = Status.WAITING
 
         if timer_status == Status.WAITING:
             if not users:
