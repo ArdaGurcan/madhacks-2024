@@ -67,11 +67,11 @@ def session_start():
     global live_session
 
     if not live_session:
+        app.logger.info("first session")
         live_session = True
         session.session_init()
 
     app.logger.info("session")
-    app.logger.info(json.dumps({"timer": session.time_value}))
     return json.dumps({"timer": session.time_value})
 
 @app.route('/check_alive', methods=['GET', 'POST'])
