@@ -2,7 +2,7 @@ import threading
 import time
 from enum import Enum, auto
 import api
-import logger
+import logging
 
 app = None
 class Status(Enum):
