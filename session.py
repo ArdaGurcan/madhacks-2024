@@ -30,11 +30,11 @@ def timer():
         time_value -= 1
 
         if timer_status == Status.WAITING:
-            if not users:
-                api.live_session = False
-                timer_value_lock.release()
-                timer_status_lock.release()
-                return
+            # if not users:
+            #     api.live_session = False
+            #     timer_value_lock.release()
+            #     timer_status_lock.release()
+            #     return
 
             users.clear()
             app.logger.info("Users have been cleared")
