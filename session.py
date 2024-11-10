@@ -2,6 +2,7 @@ import threading
 import time
 from enum import Enum, auto
 
+app = None
 class Status(Enum):
     RUNNING = auto()
     WAITING = auto()
@@ -24,6 +25,7 @@ def timer():
         timer_status == Status.WAITING
 
     if timer_status == Status.WAITING:
+        app.logger.info("Waiting has been set")
         users.clear()
         timer_status = Status.RUNNING
         time_value = INTERVAL
